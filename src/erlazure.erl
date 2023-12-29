@@ -559,7 +559,7 @@ handle_call({get_blob, Container, Blob, Options}, _From, State) ->
             {reply, {ok, Body}, State};
           ?http_partial_content->
             {reply, {ok, Body}, State};
-          _ -> {reply, {error, Body}, State}            
+          _ -> {reply, {error, Body}, State}
         end;
 
 % Snapshot blob
@@ -671,7 +671,7 @@ handle_call({new_table, TableName}, _From, State) ->
         return_response(Code, Body, State, ?http_created, created);
 
 % Get host
-handle_call({get_host, Service, Domain}, _From, State) -> 
+handle_call({get_host, Service, Domain}, _From, State) ->
         Account = State#state.account,
         Host    = lists:concat([Account, ".", erlang:atom_to_list(Service), Domain]),
         {reply, Host, State};
@@ -737,7 +737,7 @@ execute_request(ServiceContext = #service_context{}, ReqContext = #req_context{}
 
         Response = httpc:request(ReqContext#req_context.method,
                                  erlazure_http:create_request(ReqContext, [AuthHeader | Headers1]),
-                                 [{version, "HTTP/1.1"}, {ssl, [{versions, ['tlsv1.2']}]}],
+                                 [{version, "HTTP/1.1"}, {ssl, [{versions, ['tlsv1.2']}, {verify, verify_none}]}],
                                  [{sync, true}, {body_format, binary}, {headers_as_is, true}]),
         case Response of
           {ok, {{_, Code, _}, _, Body}}
